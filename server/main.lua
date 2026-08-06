@@ -51,9 +51,15 @@ lib.callback.register("spz-spectate:enter", function(source, targetSrc)
     local prevBucket = rec and rec.prevBucket or GetPlayerRoutingBucket(source)
     local targetBucket = GetPlayerRoutingBucket(targetSrc)
 
+    -- Target position so the client can teleport its (invisible) ped next to the
+    -- target — otherwise the target never streams into scope and the spectator
+    -- camera falls back to yourself (UI shows, but you don't see them).
+    local tped = GetPlayerPed(targetSrc)
+    local tc = (tped and tped ~= 0) and GetEntityCoords(tped) or nil
+
     SetPlayerRoutingBucket(source, targetBucket)
     Spectating[source] = { target = targetSrc, prevBucket = prevBucket }
-    return true
+    return { ok = true, x = tc and tc.x, y = tc and tc.y, z = tc and tc.z }
 end)
 
 local function restore(source)

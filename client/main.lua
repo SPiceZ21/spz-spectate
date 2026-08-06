@@ -82,13 +82,20 @@ local function attach()
     local t = currentTarget()
     if not t then return false end
 
-    local ok = lib.callback.await("spz-spectate:enter", false, t.id)
-    if not ok then
+    local res = lib.callback.await("spz-spectate:enter", false, t.id)
+    if not res or not res.ok then
         lib.notify({ description = "Can't spectate that player", type = "error" })
         return false
     end
 
-    local ped = awaitPed(t.id, 4000)
+    -- Teleport our own (frozen, invisible) ped onto the target so it streams into
+    -- scope, THEN hand the spectator camera the real target ped.
+    if res.x then
+        local me = PlayerPedId()
+        SetEntityCoords(me, res.x, res.y, res.z + 1.5, false, false, false, false)
+    end
+
+    local ped = awaitPed(t.id, 6000)
     if ped == 0 then
         lib.notify({ description = "Player not in view range", type = "warning" })
     end
@@ -217,6 +224,9 @@ RegisterCommand("spectate", function()
 end, false)
 
 RegisterKeyMapping("spectate", "Toggle spectator mode", "keyboard", "")
+
+-- Other resources (spz-races lobby pill) check this to hide their prompts.
+exports("IsSpectating", function() return active end)
 
 AddEventHandler("onResourceStop", function(res)
     if res == GetCurrentResourceName() and active then stop() end
