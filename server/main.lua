@@ -16,21 +16,23 @@ local function nameOf(src)
     return n
 end
 
--- List of players you can spectate (everyone online except yourself and other
--- pure spectators). Racers are flagged so the client can surface them first.
+-- List of players you can spectate. Only ACTIVE RACERS are spectatable — you
+-- can't watch someone driving around freeroam.
 lib.callback.register("spz-spectate:getTargets", function(source)
     local out = {}
     for _, sid in ipairs(GetPlayers()) do
         local s = tonumber(sid)
         if s ~= source then
             local st = Player(s).state
-            out[#out + 1] = {
-                id     = s,
-                name   = nameOf(s),
-                racing = st and st['inRace'] == true or false,
-                nation = st and st['spz:nation'] or nil,
-                number = st and st['spz:raceNumber'] or nil,
-            }
+            if st and st['inRace'] == true then
+                out[#out + 1] = {
+                    id     = s,
+                    name   = nameOf(s),
+                    racing = true,
+                    nation = st['spz:nation'] or nil,
+                    number = st['spz:raceNumber'] or nil,
+                }
+            end
         end
     end
     return out
@@ -46,6 +48,10 @@ lib.callback.register("spz-spectate:enter", function(source, targetSrc)
     -- Block spectating while you're an active competitor yourself.
     local myState = Player(source).state
     if myState and myState['inRace'] == true then return false end
+
+    -- Only active racers are spectatable — reject freeroam targets.
+    local tState = Player(targetSrc).state
+    if not (tState and tState['inRace'] == true) then return false end
 
     local rec = Spectating[source]
     local prevBucket = rec and rec.prevBucket or GetPlayerRoutingBucket(source)

@@ -141,7 +141,7 @@ local function start()
 
     targets = lib.callback.await("spz-spectate:getTargets", false) or {}
     if #targets == 0 then
-        lib.notify({ description = "No other players to spectate", type = "info" })
+        lib.notify({ description = "No active racers to spectate", type = "info" })
         return
     end
 
