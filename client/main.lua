@@ -145,9 +145,8 @@ local function start()
         return
     end
 
-    -- Racers first, then everyone else.
+    -- Server returns active racers only — just order them by name.
     table.sort(targets, function(a, b)
-        if a.racing ~= b.racing then return a.racing end
         return (a.name or "") < (b.name or "")
     end)
     idx = 1
