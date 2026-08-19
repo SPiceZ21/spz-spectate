@@ -71,8 +71,17 @@ end)
 local function restore(source)
     local rec = Spectating[source]
     if not rec then return end
-    SetPlayerRoutingBucket(source, rec.prevBucket or 0)
+
+    local back = rec.prevBucket or 0
+    SetPlayerRoutingBucket(source, back)
     Spectating[source] = nil
+
+    -- Hand the player back to spz-core's registry. The transient move above is
+    -- raw on purpose, but leaving it raw desynced session.bucket from the engine
+    -- and later bucket calls no-opped, stranding spectators in the race world.
+    if GetResourceState("spz-core") == "started" then
+        pcall(function() exports["spz-core"]:AssignPlayerToBucket(source, back) end)
+    end
 end
 
 RegisterNetEvent("spz-spectate:leave", function()
