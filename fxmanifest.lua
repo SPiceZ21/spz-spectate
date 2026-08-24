@@ -28,3 +28,8 @@ files {
   'ui/asset/fonts/*.ttf',
   'ui/asset/flags/*.webp',
 }
+
+dependencies {
+  'ox_lib',
+  'spz-core',
+}

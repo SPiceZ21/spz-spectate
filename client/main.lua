@@ -9,6 +9,18 @@ local targets  = {}      -- { {id,name,racing,nation,number}, ... }
 local idx      = 1
 local myBack   = nil     -- coords to restore to on exit
 
+-- Base theme (server.cfg spz_theme_* convars via spz-core).
+local function pushSpectateTheme(theme)
+    if theme and next(theme) then
+        SendNUIMessage({ action = 'theme', theme = theme })
+    end
+end
+CreateThread(function()
+    local ok, theme = pcall(function() return exports['spz-core']:GetTheme() end)
+    if ok then pushSpectateTheme(theme) end
+end)
+AddEventHandler('SPZ:themeUpdated', function(theme) pushSpectateTheme(theme) end)
+
 -- ── Helpers ──────────────────────────────────────────────────────────────────
 
 local function targetPed(serverId)

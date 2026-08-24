@@ -46,6 +46,24 @@
     el('counter').textContent = (d.index || 1) + ' / ' + (d.total || 1);
   }
 
+  // Base theme (server.cfg spz_theme_* convars, pushed from spz-core).
+  const THEME_VARS = { accent: '--primary', gold: '--gold' };
+  const THEME_RGB_VARS = { accent: '--primary-rgb' };
+  function hexToRgbTriplet(hex) {
+    const m = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex || '');
+    return m ? `${parseInt(m[1], 16)}, ${parseInt(m[2], 16)}, ${parseInt(m[3], 16)}` : null;
+  }
+  function applyTheme(theme) {
+    if (!theme) return;
+    for (const key in THEME_VARS) {
+      if (theme[key]) document.documentElement.style.setProperty(THEME_VARS[key], theme[key]);
+    }
+    for (const key in THEME_RGB_VARS) {
+      const rgb = theme[key] && hexToRgbTriplet(theme[key]);
+      if (rgb) document.documentElement.style.setProperty(THEME_RGB_VARS[key], rgb);
+    }
+  }
+
   window.addEventListener('message', (e) => {
     const m = e.data || {};
     if (m.action === 'show') {
@@ -55,6 +73,8 @@
     } else if (m.action === 'update') {
       root.classList.remove('hidden');
       update(m.data || {});
+    } else if (m.action === 'theme') {
+      applyTheme(m.theme);
     }
   });
 })();
