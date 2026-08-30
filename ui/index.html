@@ -50,6 +50,31 @@
 
   </div>
 
+  <!-- Live race board — independent of the spectator bar above: shown to
+       everyone outside the race, whether or not they are spectating. -->
+  <div id="rf-root" class="hidden">
+
+    <div class="rf-top">
+      <span class="rf-eyebrow"><span class="dot"></span> <span id="rf-state">LIVE RACE</span></span>
+      <span id="rf-lap" class="rf-lap">LAP 1/1</span>
+    </div>
+
+    <div class="rf-meta">
+      <span id="rf-track" class="rf-track">—</span>
+      <span id="rf-class" class="rf-class"></span>
+    </div>
+
+    <div id="rf-list" class="rf-list"></div>
+
+    <!-- Key hints. Shown in every view including mini: a shortcut you cannot
+         see is a shortcut nobody uses. -->
+    <div class="rf-keys">
+      <span id="rf-k-cycle" class="kc">F7</span><span class="fsep">SIZE</span>
+      <span id="rf-k-hide" class="kc">F8</span><span class="fsep">HIDE</span>
+    </div>
+
+  </div>
+
   <script src="app.js"></script>
 </body>
 </html>

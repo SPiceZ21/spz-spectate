@@ -1,0 +1,37 @@
+-- config.lua
+Config = Config or {}
+
+-- ── Live race board ─────────────────────────────────────────────────────────
+-- The passive board shown to everyone OUTSIDE the race: track, leader's lap,
+-- and the running order with real time gaps. Racers are excluded — they already
+-- carry the full tower in spz-raceUI and a second one would cover the road.
+--
+-- Lives here rather than in its own resource because it has the same audience
+-- as spectating and reuses this resource's flags, fonts and theme bridge.
+Config.Board = {
+    enabled = true,
+
+    -- Players in the queue still see it by default: they are about to race, and
+    -- watching the current one is the point of the wait.
+    showToQueued = true,
+
+    -- Rows per view. The field can be 16 cars, but a passive overlay someone
+    -- drives past should not own a third of the screen. Anything trimmed is
+    -- reported as "+N MORE" rather than silently dropped.
+    maxRows  = 8,   -- full view
+    miniRows = 3,   -- mini view
+
+    defaultView = "full",   -- "full" | "mini" | "hidden"
+
+    -- Keep the board up through the post-race results window so freeroamers see
+    -- the final classification instead of it vanishing at the flag.
+    holdAfterFinishMs = 12000,
+
+    -- Defaults only — every binding is rebindable by the player in FiveM's own
+    -- key-binding settings. Set a key to "" to register the command with no
+    -- default binding; the chat commands work either way.
+    keys = {
+        cycle = "F7",   -- full → mini → hidden → full
+        hide  = "F8",   -- straight to hidden, or back to the last size
+    },
+}
