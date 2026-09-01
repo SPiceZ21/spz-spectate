@@ -32,8 +32,7 @@ end
 
 -- ── Standings feed ───────────────────────────────────────────────────────────
 -- Emitted by spz-races/server/positions.lua on its own throttle
--- (Config.StandingsBroadcastInterval). Humans and ghost-bots both appear; the
--- bot flag is passed through so the board can mark them.
+-- (Config.StandingsBroadcastInterval).
 AddEventHandler("SPZ:standings", function(payload, version)
     if CFG.enabled == false then return end
     if type(payload) ~= "table" then return end
@@ -49,7 +48,6 @@ AddEventHandler("SPZ:standings", function(payload, version)
             gap      = e.gap,
             interval = e.interval,
             lap      = e.lap,
-            bot      = e.bot or false,
             dc       = e.dc or false,
             finished = e.finished or false,
             nation   = e.nation,

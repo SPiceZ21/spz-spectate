@@ -40,7 +40,6 @@ Trimmed rows are reported as `+N MORE`, never silently dropped.
 | Marker | Meaning |
 |---|---|
 | Gold rail + gold position | Race leader |
-| `BOT` tag | Ghost-bot — a replayed line. Scores nothing |
 | `DC` tag, row dimmed | Dropped mid-race, slot held for reconnect |
 | `DNF` gap, row dimmed | Did not finish (final classification only) |
 

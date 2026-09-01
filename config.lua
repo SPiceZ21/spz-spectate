@@ -30,8 +30,13 @@ Config.Board = {
     -- Defaults only — every binding is rebindable by the player in FiveM's own
     -- key-binding settings. Set a key to "" to register the command with no
     -- default binding; the chat commands work either way.
+    -- Registry: Docs/keybinds.md — check it before claiming a key.
+    --
+    -- NOT F7 (spz-speedcam records) and NOT F8, which FiveM reserves for its own
+    -- console: binding it here left the board and the console fighting over
+    -- every press.
     keys = {
-        cycle = "F7",   -- full → mini → hidden → full
-        hide  = "F8",   -- straight to hidden, or back to the last size
+        cycle = "F9",    -- full → mini → hidden → full
+        hide  = "F11",   -- straight to hidden, or back to the last size
     },
 }
