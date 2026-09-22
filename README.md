@@ -54,6 +54,11 @@ spectator most wants it — `SPZ:raceEnd` swaps in the final classification and 
 `raceState` returning to `IDLE`/`CLEANUP` clears the board too. Players connecting mid-race
 request the current board instead of waiting for the next tick.
 
+A player who joins mid-race is not audience until they are actually in the world: the board
+stays down through the loading screen and the spawn menu, gated on `spz-spawn`'s
+`spawned` / `spawnMenuOpen` client statebags. Both nil (no `spz-spawn`) reads as in-world,
+so the board still works on a server without that module.
+
 ## Structure
 
 | Side | File | Purpose |

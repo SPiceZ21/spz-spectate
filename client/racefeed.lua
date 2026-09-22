@@ -20,8 +20,16 @@ local lastSize = view ~= "hidden" and view or "full"
 -- Racers already carry the full tower in spz-raceUI; a second one would just
 -- cover the road. Everyone else — freeroamers, spectators, and (by config) the
 -- queue waiting for the next cycle — is the audience for this board.
+--
+-- Not yet in the world either: spz-spawn publishes `spawned` / `spawnMenuOpen`
+-- as client-local statebags, and the board was painting over the spawn menu (and
+-- over the moment the loading screen came down) for anyone who joined while a
+-- race was running. Both are nil when spz-spawn is not running, which reads as
+-- "in the world" so the board is never lost on a server without it.
 local function isAudience()
     local st = LocalPlayer.state
+    if st.spawnMenuOpen then return false end
+    if st.spawned == false then return false end
     if st.inRace then return false end
     if st.inQueue and CFG.showToQueued == false then return false end
     return true
@@ -53,6 +61,11 @@ end)
 local myBag = ("player:%s"):format(GetPlayerServerId(PlayerId()))
 AddStateBagChangeHandler("inRace",  myBag, function() paint() end)
 AddStateBagChangeHandler("inQueue", myBag, function() paint() end)
+
+-- Same for leaving the spawn menu: the board has to appear the moment the
+-- player is actually in the world, not at the next standings tick.
+AddStateBagChangeHandler("spawned",       myBag, function() paint() end)
+AddStateBagChangeHandler("spawnMenuOpen", myBag, function() paint() end)
 
 -- Joining mid-race: ask for the current board instead of waiting a tick.
 CreateThread(function()
