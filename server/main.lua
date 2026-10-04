@@ -8,6 +8,9 @@
 
 local Spectating = {}   -- [spectatorSrc] = { target = tgt, prevBucket = n }
 
+-- Read by spz-analytics (activity mode / server snapshots).
+exports("IsSpectating", function(src) return Spectating[tonumber(src)] ~= nil end)
+
 local function nameOf(src)
     local st = Player(src).state
     local n = st and st['spz:name']
