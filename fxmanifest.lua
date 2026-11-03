@@ -13,6 +13,7 @@ shared_scripts {
 }
 
 client_scripts {
+    '@spz-hud/shim.lua',   -- NUI goes through spz-hud
   'client/main.lua',
   'client/racefeed.lua',
 }
@@ -22,7 +23,7 @@ server_scripts {
   'server/racefeed.lua',
 }
 
-ui_page 'ui/index.html'
+-- ui_page 'ui/index.html'  -- drawn by spz-hud now (web/public/apps/spz-spectate); uncomment + drop the shim to roll back
 
 files {
   'ui/index.html',
@@ -33,6 +34,7 @@ files {
 }
 
 dependencies {
+    'spz-hud',
   'ox_lib',
   'spz-core',
   'spz-races',
